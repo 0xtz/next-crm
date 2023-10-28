@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   ChartIcon,
   CogIcon,
@@ -10,84 +9,101 @@ import {
 } from "@/components/icons";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const links = [
-  { label: "Home", icon: HomeIcon, href: "/" },
+  { label: "Home", icon: HomeIcon, href: "/#" },
   {
     label: "Metrics",
     icon: ChartIcon,
-    href: "statistics",
+    href: "/statistics",
   },
   {
     label: "Forecast",
     icon: TrendingUpIcon,
-    href: "#",
+    href: "/forecast",
   },
-  { label: "Customers", icon: UsersIcon, href: "customers" },
+  { label: "Customers", icon: UsersIcon, href: "/customers" },
 ];
 
 const bottomLinks = [
   {
     label: "Settings",
     icon: CogIcon,
-    href: "#",
+    href: "/settings",
   },
   { label: "Logout", icon: LogoutIcon, href: "#" },
 ];
 
 export default function SideBare() {
+  const pathname = usePathname().replace("/dashboard", "");
+
   return (
-    <div className="flex h-full flex-col bg-primary-foreground ">
+    // stick to the left side dont scroll with the page
+    <aside className="position-fixed flex h-full w-64 flex-col overflow-hidden bg-foreground text-secondary">
+      {
+        // LOGO
+      }
+      <div className="flex h-24 w-full items-center justify-center">
+        <h2 className="text-center text-2xl font-bold">NextCrm</h2>
+      </div>
+      {
+        // TOP LINKS
+      }
       <div className="flex flex-1 flex-col overflow-y-auto">
-        {/* Logo */}
-        <div className="text-heading mt-5 h-8 flex-shrink-0 px-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              fillRule="evenodd"
-              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm0 8.625a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM15.375 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
-
-        <div className="mt-5 space-y-3 px-1 sm:px-2">
-          {links.map((link) => {
-            const Icon = link.icon;
-            return (
-              <Link
-                key={link.label}
-                href={`/dashboard/${link.href}`}
-                className={`focus:ring-heading/80 hover:text-heading/80 group relative flex h-10 w-10 items-center justify-center rounded-xl font-medium focus:outline-none focus:ring-2`}
-              >
-                <Icon className="h-6 w-6 flex-shrink-0" />
-                <span className="sr-only">{link.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Bottom Links */}
-      <div className="mb-2 space-y-3 px-1 sm:px-2">
-        {bottomLinks.map((link) => {
-          const Icon = link.icon;
-          return (
-            <Link
+        <ul className="flex flex-col gap-6 px-3">
+          {links.map((link) => (
+            <li
               key={link.label}
-              href={link.href}
-              className={`focus:ring-heading/80 group relative flex h-10 w-10 items-center justify-center rounded-xl font-medium focus:outline-none focus:ring-2`}
+              className={cn(
+                "rounded-xl",
+                pathname.startsWith(`${link.href}`) &&
+                  "bg-primary text-primary-foreground",
+              )}
             >
-              <Icon className="h-6 w-6 flex-shrink-0" />
-              <span className="sr-only">{link.label}</span>
-            </Link>
-          );
-        })}
+              <Link
+                href={`/dashboard${link.href}`}
+                className="flex items-center gap-4 p-4"
+              >
+                <link.icon
+                  className={cn(
+                    "h-5 w-5",
+                    !pathname.startsWith(`${link.href}`) && "text-primary",
+                  )}
+                />
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
+
+      {
+        //BOTTOM LINKS
+      }
+      <div className="mb-2 space-y-3 px-1 sm:px-2">
+        <ul className="flex flex-col gap-6">
+          {bottomLinks.map((link) => (
+            <li
+              key={link.label}
+              className={cn(
+                "rounded-xl",
+                pathname.startsWith(`${link.href}`) &&
+                  "bg-primary text-primary-foreground",
+              )}
+            >
+              <Link
+                href={`/dashboard${link.href}`}
+                className="flex items-center gap-4 p-4"
+              >
+                <link.icon className="h-5 w-5" />
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
   );
 }

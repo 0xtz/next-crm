@@ -1,17 +1,15 @@
 import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
 
-import { Inter as FontSans } from "next/font/google";
+import { GeistSans, GeistMono } from "geist/font";
 
-export const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+// font geist
+const font = GeistSans({});
 
 export const metadata = {
   title: "next CRM",
   description: "A CRM built with Next.js",
-  // icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
 export default function RootLayout({
@@ -20,15 +18,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+    >
       <head />
-      <body
-        className={cn(
-          "bg-background min-h-screen font-sans antialiased",
-          fontSans.variable,
-        )}
-      >
-        {children}
+      <body className={cn("min-h-screen bg-background font-sans antialiased")}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange // this ll prevent the transition on page load
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

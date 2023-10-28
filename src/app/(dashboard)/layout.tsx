@@ -12,10 +12,7 @@ export default function RootLayout({
       <SideBare />
       <div className="flex-1">
         {/* Content */}
-        <div className="h-full p-6">
-          {/* <div className="border-muted-1 h-full rounded-xl border-2" /> */}
-          {children}
-        </div>
+        <div className="h-full p-6">{children}</div>
       </div>
     </div>
   );
